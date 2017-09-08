@@ -1,7 +1,34 @@
+<?php
+if (isset($_GET["action"])) {
+	switch ($_GET["action"]) {
+		case 'getmail':
+			$response = array();
+			if (isset($_GET["folder"])) {
+				$response["id"] = $_GET["folder"];
+				$response["mails"][] = array(
+					"id" => 11,
+					"from" => "monica@mail.com",
+					"to" => "max@mail.com",
+					"date" => "May 2, 2011",
+					"subject" => $_GET["folder"]." test subject",
+					"folder" => $_GET["folder"]
+				);
+			}
+			echo json_encode($response);
+		break;
+		default:
+		break;
+	}
+	exit;
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
 <title>Knockout Application</title>
+<link href="http://learn.knockoutjs.com/Content/TutorialSpecific/webmail.css" type="text/css" rel="stylesheet"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
 <script type='text/javascript' src="jquery-3.2.1.min.js"></script>
 <script type='text/javascript' src='knockout-3.4.2.js'></script>
 <script type='text/javascript' src='main.js'></script>
@@ -43,6 +70,25 @@
 <h3 data-bind="visible: totalSurcharge() > 0">
     Total surcharge: $<span data-bind="text: totalSurcharge().toFixed(2)"></span>
 </h3>
+
+<h1>Single page Application</h1>
+
+<ul data-bind="foreach: folders" class="folders">
+    <li data-bind="text: $data, css: {selected: $data == $root.chosenFolderId()}, click: $root.goToFolder"></li>
+</ul>
+<!-- Mails grid -->
+<table class="mails" data-bind="with: chosenFolderData">
+    <thead><tr><th>From</th><th>To</th><th>Subject</th><th>Date</th></tr></thead>
+    <tbody data-bind="foreach: mails">
+        <tr>
+            <td data-bind="text: from"></td>
+            <td data-bind="text: to"></td>
+            <td data-bind="text: subject"></td>
+            <td data-bind="text: date"></td>
+        </tr>     
+    </tbody>
+</table>
+
 
 </body>
 </html>

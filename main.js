@@ -2,6 +2,7 @@ $(document).ready(function(){
 
 	// This is a simple *viewmodel* - JavaScript that defines the data and behavior of your UI
 	function AppViewModel() {
+		
 		this.firstName = ko.observable();
 		this.lastName = ko.observable("Bertington");
 		this.fullName = ko.computed(function() {
@@ -43,6 +44,22 @@ $(document).ready(function(){
 			   total += self.seats()[i].meal().price;
 		   return total;
 		});
+		
+		/*************************/
+		/*Single page Application*/
+		/*************************/
+		// Data
+		self.folders = ['Inbox', 'Archive', 'Sent', 'Spam'];
+		self.chosenFolderId = ko.observable();
+		self.chosenFolderData = ko.observable();
+		
+		// Behaviours
+		self.goToFolder = function(folder) { 
+			self.chosenFolderId(folder); 
+			$.get('mail/'+folder, {}, self.chosenFolderData);
+		}
+		// Show inbox by default
+		self.goToFolder('Inbox');
 		
 	}
 
