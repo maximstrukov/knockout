@@ -54,9 +54,11 @@ $(document).ready(function(){
 		self.chosenFolderData = ko.observable();
 		
 		// Behaviours
-		self.goToFolder = function(folder) { 
+		self.goToFolder = function(folder) {
 			self.chosenFolderId(folder); 
-			$.get('mail/'+folder, {}, self.chosenFolderData);
+			$.get('mail/'+folder, {}, function( response ) {
+				self.chosenFolderData( JSON.parse(response) );
+			});
 		}
 		// Show inbox by default
 		self.goToFolder('Inbox');
