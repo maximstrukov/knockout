@@ -52,16 +52,46 @@ $(document).ready(function(){
 		self.folders = ['Inbox', 'Archive', 'Sent', 'Spam'];
 		self.chosenFolderId = ko.observable();
 		self.chosenFolderData = ko.observable();
+		self.chosenMailData = ko.observable();
 		
 		// Behaviours
-		self.goToFolder = function(folder) {
+		/*self.goToFolder = function(folder) {
 			self.chosenFolderId(folder); 
-			$.get('mail/'+folder, {}, function( response ) {
-				self.chosenFolderData( JSON.parse(response) );
+			$.get('/getmail/folder/'+folder, { }, self.chosenFolderData);
+			//$.get('mail/'+folder, {}, function( response ) {
+				//self.chosenFolderData( JSON.parse(response) );
+			//});
+			self.chosenMailData(null); // Stop showing a mail
+		}*/
+		self.goToFolder = function(folder) { location.hash = folder };
+		
+		/*self.goToMail = function(mail) {
+			self.chosenFolderId(mail.folder);
+			self.chosenFolderData(null); // Stop showing a folder
+			$.get("/getmail/mail/"+mail.id, { }, self.chosenMailData);
+		};*/
+		self.goToMail = function(mail) { location.hash = mail.folder + '/' + mail.id };
+
+		// Client-side routes
+		Sammy(function() {
+			this.get('#:folder', function() {
+				self.chosenFolderId(this.params.folder);
+				self.chosenMailData(null);
+				$.get('/getmail/folder/'+this.params.folder, { }, self.chosenFolderData);
 			});
-		}
+
+			this.get('#:folder/:mailId', function() {
+				self.chosenFolderId(this.params.folder);
+				self.chosenFolderData(null);
+				$.get("/getmail/mail/"+this.params.mailId, { }, self.chosenMailData);
+			});
+			
+			this.get('', function() { this.app.runRoute('get', '#Inbox') });
+		}).run();
+		
 		// Show inbox by default
-		self.goToFolder('Inbox');
+		//self.goToFolder('Inbox');
+		
 		
 	}
 

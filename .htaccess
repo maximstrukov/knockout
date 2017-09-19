@@ -3,4 +3,5 @@ RewriteEngine on
 
 
 RewriteCond %{REQUEST_FILENAME} !-F
-RewriteRule ^mail/(.*)$ index.php?action=getmail&folder=$1 [L]
+RewriteRule ^getmail/folder/(.*)$ ?action=getmail&folder=$1 [L]
+RewriteRule ^getmail/mail/(.*)$ ?action=getmail&mail=$1 [L]

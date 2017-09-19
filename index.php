@@ -14,6 +14,18 @@ if (isset($_GET["action"])) {
 					"folder" => $_GET["folder"]
 				);
 			}
+			if (isset($_GET["mail"])) {
+				$response = array(
+					"id" => $_GET["mail"],
+					"from" => "monica@mail.com",
+					"to" => "max@mail.com",
+					"date" => "May 2, 2011",
+					"subject" => $_GET["mail"]." test subject",
+					"messageContent" => "The Best content ever!<br/>Enjoy it! Say 'Yes!'",
+					"folder" => ""
+				);
+			}
+			header('Content-Type: application/json');
 			echo json_encode($response);
 		break;
 		default:
@@ -31,6 +43,7 @@ if (isset($_GET["action"])) {
 <link href="style.css" type="text/css" rel="stylesheet"/>
 <script type='text/javascript' src="jquery-3.2.1.min.js"></script>
 <script type='text/javascript' src='knockout-3.4.2.js'></script>
+<script type='text/javascript' src='sammy-latest.min.js'></script>
 <script type='text/javascript' src='main.js'></script>
 </head>
 <body>
@@ -80,7 +93,7 @@ if (isset($_GET["action"])) {
 <table class="mails" data-bind="with: chosenFolderData">
     <thead><tr><th>From</th><th>To</th><th>Subject</th><th>Date</th></tr></thead>
     <tbody data-bind="foreach: mails">
-        <tr>
+        <tr data-bind="click: $root.goToMail">
             <td data-bind="text: from"></td>
             <td data-bind="text: to"></td>
             <td data-bind="text: subject"></td>
@@ -89,6 +102,16 @@ if (isset($_GET["action"])) {
     </tbody>
 </table>
 
+<!-- Chosen mail -->
+<div class="viewMail" data-bind="with: chosenMailData">
+    <div class="mailInfo">
+        <h1 data-bind="text: subject"></h1>
+        <p><label>From</label>: <span data-bind="text: from"></span></p>
+        <p><label>To</label>: <span data-bind="text: to"></span></p>
+        <p><label>Date</label>: <span data-bind="text: date"></span></p>
+    </div>
+    <p class="message" data-bind="html: messageContent" />
+</div>
 
 </body>
 </html>
