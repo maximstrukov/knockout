@@ -72,7 +72,7 @@ $(document).ready(function(){
 		};*/
 		self.goToMail = function(mail) { location.hash = mail.folder + '/' + mail.id };
 
-		// Client-side routes
+		// Client-side routes using Scam framework
 		Sammy(function() {
 			this.get('#:folder', function() {
 				self.chosenFolderId(this.params.folder);
